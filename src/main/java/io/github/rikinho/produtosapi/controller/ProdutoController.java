@@ -5,15 +5,11 @@ import io.github.rikinho.produtosapi.repository.ProdutoRepository;
 import io.github.rikinho.produtosapi.validator.ValidarProduto;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("produtos")
 public class ProdutoController {
 
-    private ProdutoRepository produtoRepository;
-
+    private final ProdutoRepository produtoRepository;
     private final ValidarProduto validarProduto;
 
     public ProdutoController(ProdutoRepository produtoRepository, ValidarProduto validarProduto) {
@@ -24,9 +20,8 @@ public class ProdutoController {
     @PostMapping
     public Produto salvar(@RequestBody Produto produto) {
         validarProduto.validar(produto);
-        System.out.println("Produto recebido: " + produto);
-        var id = UUID.randomUUID().toString();
-        produto.setId(id);
+        produto.gerarId();
+        produto.gerarDataPostagem();
         produtoRepository.save(produto);
         return produto;
     }
@@ -47,5 +42,4 @@ public class ProdutoController {
         produto.setId(id);
         produtoRepository.save(produto);
     }
-
 }

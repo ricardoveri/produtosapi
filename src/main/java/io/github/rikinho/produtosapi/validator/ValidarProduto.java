@@ -1,8 +1,6 @@
 package io.github.rikinho.produtosapi.validator;
 
-import io.github.rikinho.produtosapi.exception.DescricaoInvalidaException;
-import io.github.rikinho.produtosapi.exception.NomeInvalidoException;
-import io.github.rikinho.produtosapi.exception.PrecoInvalidoException;
+import io.github.rikinho.produtosapi.exception.*;
 import io.github.rikinho.produtosapi.model.Produto;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +15,13 @@ public class ValidarProduto {
             throw new DescricaoInvalidaException("A descricao deve ter no máximo 300 caracteres.");
         }
 
+        if (produto.getQuantidade() < 0) {
+            throw new QuantidadeInvalidaException("A quantidade do produto deve ser maior ou igual a zero.");
+        }
+
         if (produto.getPreco() == null || produto.getPreco() < 0) {
             throw new PrecoInvalidoException("O preço do produto deve ser maior ou igual a zero.");
         }
+
     }
 }

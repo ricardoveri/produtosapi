@@ -5,6 +5,8 @@ import io.github.rikinho.produtosapi.repository.ProdutoRepository;
 import io.github.rikinho.produtosapi.validator.ValidarProduto;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("produtos")
 public class ProdutoController {
@@ -20,7 +22,6 @@ public class ProdutoController {
     @PostMapping
     public Produto salvar(@RequestBody Produto produto) {
         validarProduto.validar(produto);
-        produto.gerarId();
         produto.gerarDataPostagem();
         produtoRepository.save(produto);
         return produto;
@@ -37,9 +38,14 @@ public class ProdutoController {
     }
 
     @PutMapping("{id}")
-    public void atualizar(@PathVariable("id") String id, @RequestBody Produto produto) {
-        validarProduto.validar(produto);
-        produto.setId(id);
-        produtoRepository.save(produto);
+    public Produto atualizar(@PathVariable("id") String id, @RequestBody Produto novoProduto) {
+        Produto produto = obterPorId(id);
+        validarProduto.validar(novoProduto);
+        produto.setNome(novoProduto.getNome());
+        produto.setDescricao(novoProduto.getDescricao());
+        produto.setQuantidade(novoProduto.getQuantidade());
+        produto.setDataPostagem(LocalDate.now());
+        produto.setPreco(novoProduto.getPreco());
+        return produtoRepository.save(produto);
     }
 }

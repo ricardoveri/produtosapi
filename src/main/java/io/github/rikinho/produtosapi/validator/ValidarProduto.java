@@ -22,6 +22,5 @@ public class ValidarProduto {
         if (produto.getPreco() == null || produto.getPreco() < 0) {
             throw new PrecoInvalidoException("O preço do produto deve ser maior ou igual a zero.");
         }
-
     }
 }

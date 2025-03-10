@@ -2,50 +2,42 @@ package io.github.rikinho.produtosapi.controller;
 
 import io.github.rikinho.produtosapi.model.Produto;
 import io.github.rikinho.produtosapi.repository.ProdutoRepository;
-import io.github.rikinho.produtosapi.validator.ValidarProduto;
+import io.github.rikinho.produtosapi.service.ProdutoServices;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("produtos")
 public class ProdutoController {
 
-    private final ProdutoRepository produtoRepository;
-    private final ValidarProduto validarProduto;
+    private final ProdutoServices produtoServices;
 
-    public ProdutoController(ProdutoRepository produtoRepository, ValidarProduto validarProduto) {
-        this.produtoRepository = produtoRepository;
-        this.validarProduto = validarProduto;
+    public ProdutoController(ProdutoServices produtoServices) {
+        this.produtoServices = produtoServices;
     }
 
     @PostMapping
     public Produto salvar(@RequestBody Produto produto) {
-        validarProduto.validar(produto);
-        produto.gerarDataPostagem();
-        produtoRepository.save(produto);
-        return produto;
+        return produtoServices.salvar(produto);
     }
 
+    @GetMapping()
+    public List<Produto> listarProdutos() {
+        return produtoServices.listarProdutos();
+    }
     @GetMapping("/{id}")
     public Produto obterPorId(@PathVariable("id") String id) {
-        return produtoRepository.findById(id).orElse(null);
+        return produtoServices.obterPorId(id);
     }
 
     @DeleteMapping("{id}")
     public void deletar(@PathVariable String id) {
-        produtoRepository.deleteById(id);
+        produtoServices.deletar(id);
     }
 
     @PutMapping("{id}")
     public Produto atualizar(@PathVariable("id") String id, @RequestBody Produto novoProduto) {
-        Produto produto = obterPorId(id);
-        validarProduto.validar(novoProduto);
-        produto.setNome(novoProduto.getNome());
-        produto.setDescricao(novoProduto.getDescricao());
-        produto.setQuantidade(novoProduto.getQuantidade());
-        produto.setDataPostagem(LocalDate.now());
-        produto.setPreco(novoProduto.getPreco());
-        return produtoRepository.save(produto);
+        return produtoServices.atualizar(id, novoProduto);
     }
 }

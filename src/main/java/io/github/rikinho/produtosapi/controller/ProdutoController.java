@@ -1,11 +1,11 @@
 package io.github.rikinho.produtosapi.controller;
 
 import io.github.rikinho.produtosapi.model.Produto;
-import io.github.rikinho.produtosapi.repository.ProdutoRepository;
 import io.github.rikinho.produtosapi.service.ProdutoServices;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("produtos")
@@ -27,17 +27,17 @@ public class ProdutoController {
         return produtoServices.listarProdutos();
     }
     @GetMapping("/{id}")
-    public Produto obterPorId(@PathVariable("id") String id) {
+    public Produto obterPorId(@PathVariable("id") UUID id) {
         return produtoServices.obterPorId(id);
     }
 
     @DeleteMapping("{id}")
-    public void deletar(@PathVariable String id) {
+    public void deletar(@PathVariable UUID id) {
         produtoServices.deletar(id);
     }
 
     @PutMapping("{id}")
-    public Produto atualizar(@PathVariable("id") String id, @RequestBody Produto novoProduto) {
-        return produtoServices.atualizar(id, novoProduto);
+    public Produto atualizar(@PathVariable("id") UUID id, @RequestBody Produto novosAtributos) {
+        return produtoServices.atualizar(id, novosAtributos);
     }
 }

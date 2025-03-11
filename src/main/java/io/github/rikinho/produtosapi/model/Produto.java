@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "produtos")
@@ -17,8 +18,7 @@ import java.time.LocalDate;
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id = UUID.randomUUID();
     private String nome;
     private String descricao;
     private int quantidade;

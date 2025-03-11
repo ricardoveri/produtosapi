@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProdutoServices {
@@ -32,22 +33,22 @@ public class ProdutoServices {
         return produto;
     }
 
-    public Produto obterPorId(@PathVariable("id") String id) {
+    public Produto obterPorId(@PathVariable("id") UUID id) {
         return produtoRepository.findById(id).orElse(null);
     }
 
-    public void deletar(@PathVariable String id) {
+    public void deletar(@PathVariable UUID id) {
         produtoRepository.deleteById(id);
     }
 
-    public Produto atualizar(@PathVariable("id") String id, @RequestBody Produto novoProduto) {
+    public Produto atualizar(@PathVariable("id") UUID id, @RequestBody Produto novosAtributos) {
         Produto produto = obterPorId(id);
-        validarProduto.validar(novoProduto);
-        produto.setNome(novoProduto.getNome());
-        produto.setDescricao(novoProduto.getDescricao());
-        produto.setQuantidade(novoProduto.getQuantidade());
+        validarProduto.validar(novosAtributos);
+        produto.setNome(novosAtributos.getNome());
+        produto.setDescricao(novosAtributos.getDescricao());
+        produto.setQuantidade(novosAtributos.getQuantidade());
         produto.setDataPostagem(LocalDate.now());
-        produto.setPreco(novoProduto.getPreco());
+        produto.setPreco(novosAtributos.getPreco());
         return produtoRepository.save(produto);
     }
 }
